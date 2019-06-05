@@ -1,5 +1,5 @@
 import React from "react";
-import TagComponent from "./TagComponent";
+import TagComponent from "./components/TagInput";
 import "./App.css";
 
 function App() {

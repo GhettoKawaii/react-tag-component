@@ -1,0 +1,19 @@
+.tag {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px orangered solid;
+  background-color: coral;
+  margin: 15px 5px;
+  height: 50px;
+  width: 100px;
+}
+.delete-tag {
+  position: absolute;
+  right: -3px;
+  top: -3px;
+  background: none;
+  border: none;
+  outline: none;
+}

@@ -1,13 +1,27 @@
 import React, { Component } from "react";
+import "./TagInput.css";
 
-export default class TagComponent extends Component {
+import ConfigureTag from "../ConfigureTag";
+import Tag from "../Tag";
+
+export default class TagInput extends Component {
   constructor(props) {
     super(props);
     this.state = {
       input: "",
       tags: [],
-      isEmpty: false
+      isEmpty: false,
+      selectedTag: null,
+      categories: [
+        { name: "transport", color: "#676767" },
+        { name: "fruits", color: "#DFFF2D" },
+        { name: "animals", color: "#198111" },
+        { name: "names", color: "#FC1B1B" }
+      ]
     };
+    this.selectTag = this.selectTag.bind(this);
+    this.deleteTag = this.deleteTag.bind(this);
+    this.configureTag = this.configureTag.bind(this);
   }
 
   handleChange = e => {
@@ -50,9 +64,34 @@ export default class TagComponent extends Component {
     });
   };
 
+  selectTag = id => {
+    this.setState({
+      selectedTag: id
+    });
+  };
+
+  configureTag = select => {
+    let newTags = this.state.tags;
+    let categoryForTag = this.state.categories.find(cat => {
+      return cat.name === select.target.value;
+    });
+    newTags[
+      newTags.indexOf(
+        newTags.find(tag => {
+          return tag.id === this.state.selectedTag;
+        })
+      )
+    ].category = {
+      ...categoryForTag
+    };
+    this.setState({
+      tags: newTags
+    });
+  };
+
   render() {
     console.log("%cthis.state", "color: orange; font-size: 20px", this.state);
-    let { input, isEmpty, tags } = this.state;
+    let { input, isEmpty, tags, selectedTag } = this.state;
     return (
       <div>
         <h1>This is React-Tag-Component, by the way "AREERS"!</h1>
@@ -68,16 +107,13 @@ export default class TagComponent extends Component {
             {tags.length > 0
               ? tags.map((tag, key) => {
                   return (
-                    <div className="tag" key={key}>
-                      <span
-                        onClick={this.deleteTag}
-                        id={key}
-                        className="delete-tag"
-                      >
-                        &#10006;
-                      </span>
-                      {tag.name}
-                    </div>
+                    <Tag
+                      key={key}
+                      deleteTag={this.deleteTag}
+                      selectTag={this.selectTag}
+                      tagID={key}
+                      tag={tag}
+                    />
                   );
                 })
               : null}
@@ -85,10 +121,12 @@ export default class TagComponent extends Component {
         </div>
 
         <button onClick={this.handleClick}>Add tag</button>
-        {isEmpty ? (
-          <p>Nothing to add, bruh -_-</p>
-        ) : (
-          <p>Here is your input: {this.state.input}</p>
+        {isEmpty && <p>Nothing to add, bruh -_-</p>}
+        {selectedTag != null && (
+          <ConfigureTag
+            categories={this.state.categories}
+            configureTag={this.configureTag}
+          />
         )}
       </div>
     );
