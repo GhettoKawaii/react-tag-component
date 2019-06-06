@@ -88,11 +88,22 @@ export default class TagInput extends Component {
   };
 
   onClick = e => {
+    console.log("event onClick", e.currentTarget);
+    const tagName = e.currentTarget.innerText.split("Category: ")[0];
+    const tagCategoryName = e.currentTarget.innerText.split("Category: ")[1];
+    const currentCategory = this.state.categories.find(cat => {
+      return cat.name === tagCategoryName;
+    });
+    let newTags = [
+      ...this.state.tags,
+      { id: this.state.tags.length, name: tagName, category: currentCategory }
+    ];
     this.setState({
       activeSuggestion: 0,
       filteredSuggestions: [],
       showSuggestions: false,
-      input: e.currentTarget.innerText.split("Category")[0]
+      input: "",
+      tags: newTags
     });
   };
 
