@@ -2,7 +2,6 @@ import React from "react";
 import "./Tag.css";
 
 const Tag = ({ tag, selectTag, deleteTag, tagID }) => {
-  console.log("tagID", tagID);
   return (
     <div
       className="tag"

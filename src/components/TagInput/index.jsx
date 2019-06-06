@@ -127,16 +127,16 @@ export default class TagInput extends Component {
   };
 
   deleteTag = e => {
-    console.log("e.target", e.target);
+    console.log("currentTarget", e.currentTarget);
+    e.stopPropagation();
     let findItem = this.state.tags.find(tag => {
-      return e.target.id === tag.id;
+      return e.currentTarget.id === tag.id;
     });
-    console.log("findItem", findItem);
     let tagArr = this.state.tags;
     tagArr.splice(this.state.tags.indexOf(findItem), 1);
-    console.log("tagArr", tagArr);
     this.setState({
-      tags: tagArr
+      tags: tagArr,
+      selectedTag: null
     });
   };
 
@@ -166,7 +166,6 @@ export default class TagInput extends Component {
   };
 
   closeConfigureTag = () => {
-    console.log("close");
     this.setState({
       selectedTag: null
     });
@@ -192,7 +191,6 @@ export default class TagInput extends Component {
         showSuggestions
       }
     } = this;
-    console.log("selectedTag", selectedTag);
     return (
       <div className="input-wrapper">
         <h1>This is React-Tag-Component, by the way "AREERS"!</h1>
