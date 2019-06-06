@@ -1,4 +1,5 @@
 import React, { Fragment } from "react";
+import "./Autocomplete.css";
 
 const Autocomplete = ({
   onChange,
@@ -14,7 +15,7 @@ const Autocomplete = ({
   if (showSuggestions && userInput) {
     if (filteredSuggestions.length) {
       suggestionsListComponent = (
-        <ul class="suggestions">
+        <ul className="suggestions">
           {filteredSuggestions.map((suggestion, index) => {
             let className;
             if (index === activeSuggestion) {
@@ -22,7 +23,7 @@ const Autocomplete = ({
             }
 
             return (
-              <li className={className} key={suggestion} onClick={onClick}>
+              <li className={className} key={suggestion.id} onClick={onClick}>
                 {suggestion.name}
                 <br />
                 Category: {suggestion.category.name}
@@ -33,7 +34,7 @@ const Autocomplete = ({
       );
     } else {
       suggestionsListComponent = (
-        <div class="no-suggestions">
+        <div className="no-suggestions">
           <em>No suggestions, you're on your own!</em>
         </div>
       );

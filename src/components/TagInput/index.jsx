@@ -101,11 +101,12 @@ export default class TagInput extends Component {
 
     // enter
     if (e.keyCode === 13) {
-      this.setState({
-        activeSuggestion: 0,
-        showSuggestions: false,
-        input: filteredSuggestions[activeSuggestion]
-      });
+      // this.setState({
+      //   activeSuggestion: 0,
+      //   showSuggestions: false,
+      //   input: filteredSuggestions[activeSuggestion].name
+      // });
+      this.handleClick();
     }
     // up
     else if (e.keyCode === 38) {
@@ -126,11 +127,14 @@ export default class TagInput extends Component {
   };
 
   deleteTag = e => {
+    console.log("e.target", e.target);
     let findItem = this.state.tags.find(tag => {
-      return e.target.id == tag.id;
+      return e.target.id === tag.id;
     });
+    console.log("findItem", findItem);
     let tagArr = this.state.tags;
     tagArr.splice(this.state.tags.indexOf(findItem), 1);
+    console.log("tagArr", tagArr);
     this.setState({
       tags: tagArr
     });
@@ -162,6 +166,7 @@ export default class TagInput extends Component {
   };
 
   closeConfigureTag = () => {
+    console.log("close");
     this.setState({
       selectedTag: null
     });
@@ -169,26 +174,35 @@ export default class TagInput extends Component {
 
   render() {
     console.log("%cthis.state", "color: orange; font-size: 20px", this.state);
-
     let {
-      input,
-      isEmpty,
-      tags,
-      selectedTag,
-      activeSuggestion,
-      filteredSuggestions,
-      showSuggestions
-    } = this.state;
+      handleChange,
+      suggestions,
+      onKeyDown,
+      onClick,
+      deleteTag,
+      selectTag,
+      closeConfigureTag,
+      state: {
+        input,
+        isEmpty,
+        tags,
+        selectedTag,
+        activeSuggestion,
+        filteredSuggestions,
+        showSuggestions
+      }
+    } = this;
+    console.log("selectedTag", selectedTag);
     return (
       <div className="input-wrapper">
         <h1>This is React-Tag-Component, by the way "AREERS"!</h1>
         <div className="input-with-tags">
           <Autocomplete
-            onChange={this.handleChange}
-            suggestions={this.suggestions}
-            userInput={this.state.input}
-            onKeyDown={this.onKeyDown}
-            onClick={this.onClick}
+            onChange={handleChange}
+            suggestions={suggestions}
+            userInput={input}
+            onKeyDown={onKeyDown}
+            onClick={onClick}
             activeSuggestion={activeSuggestion}
             filteredSuggestions={filteredSuggestions}
             showSuggestions={showSuggestions}
@@ -199,8 +213,8 @@ export default class TagInput extends Component {
                   return (
                     <Tag
                       key={key}
-                      deleteTag={this.deleteTag}
-                      selectTag={this.selectTag}
+                      deleteTag={deleteTag}
+                      selectTag={selectTag}
                       tagID={key}
                       tag={tag}
                     />
@@ -215,9 +229,9 @@ export default class TagInput extends Component {
           <ConfigureTag
             categories={this.state.categories}
             configureTag={this.configureTag}
-            closeConfigureTag={this.closeConfigureTag}
+            closeConfigureTag={closeConfigureTag}
             tag={tags.find(tag => {
-              return tag.id == this.state.selectedTag;
+              return tag.id === this.state.selectedTag;
             })}
           />
         )}

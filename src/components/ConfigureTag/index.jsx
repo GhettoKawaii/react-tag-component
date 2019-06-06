@@ -2,7 +2,6 @@ import React from "react";
 import "./ConfigureTag.css";
 
 const ConfigureTag = ({ categories, configureTag, closeConfigureTag, tag }) => {
-  console.log("tag", tag);
   return (
     <div className="configure-tag-container">
       <button onClick={closeConfigureTag} className="close-configure-tag">
