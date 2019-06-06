@@ -12,7 +12,10 @@ const Tag = ({ tag, selectTag, deleteTag, tagID }) => {
       <button onClick={deleteTag} id={tagID} className="delete-tag">
         &#10006;
       </button>
-      {tag.name}
+      <p>{tag.name}</p>
+      {tag.category && (
+        <p className="tag-category">Category: {tag.category.name}</p>
+      )}
     </div>
   );
 };

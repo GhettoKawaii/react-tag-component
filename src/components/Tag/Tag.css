@@ -1,8 +1,9 @@
 .tag {
+  flex-direction: column;
+  justify-content: space-evenly;
   position: relative;
   display: flex;
   align-items: center;
-  justify-content: center;
   border: 1px orangered solid;
   background-color: coral;
   margin: 15px 5px;
@@ -16,4 +17,11 @@
   background: none;
   border: none;
   outline: none;
+}
+.tag-category {
+  font-style: italic;
+}
+.tag p {
+  margin: 0px;
+  font-size: 12px;
 }

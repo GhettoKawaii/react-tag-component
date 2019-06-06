@@ -1,0 +1,27 @@
+.configure-tag-container {
+  margin-top: 10px;
+  padding-top: 20px;
+  position: relative;
+  width: 200px;
+  height: 100px;
+  border: 1px black solid;
+}
+.close-configure-tag {
+  background: none;
+  outline: none;
+  border: none;
+  position: absolute;
+  right: 0px;
+  top: 0px;
+}
+.configure-category {
+  display: flex;
+  justify-content: space-evenly;
+}
+.configure-tag-name {
+  position: absolute;
+  top: -2px;
+  left: 10px;
+  color: gray;
+  font-style: italic;
+}

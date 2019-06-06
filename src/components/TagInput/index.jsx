@@ -3,12 +3,16 @@ import "./TagInput.css";
 
 import ConfigureTag from "../ConfigureTag";
 import Tag from "../Tag";
+import Autocomplete from "../Autocomplete";
 
 export default class TagInput extends Component {
   constructor(props) {
     super(props);
     this.state = {
       input: "",
+      activeSuggestion: 0,
+      filteredSuggestions: [],
+      showSuggestions: false,
       tags: [],
       isEmpty: false,
       selectedTag: null,
@@ -22,11 +26,47 @@ export default class TagInput extends Component {
     this.selectTag = this.selectTag.bind(this);
     this.deleteTag = this.deleteTag.bind(this);
     this.configureTag = this.configureTag.bind(this);
+    this.closeConfigureTag = this.closeConfigureTag.bind(this);
+    this.handleChange = this.handleChange.bind(this);
+    this.onKeyDown = this.onKeyDown.bind(this);
+    this.onClick = this.onClick.bind(this);
   }
+  suggestions = [
+    { id: 0, name: "Sanya", category: { name: "names", color: "#FC1B1B" } },
+    {
+      id: 1,
+      name: "Passat",
+      category: { name: "transport", color: "#676767" }
+    },
+    { id: 2, name: "XUI", category: { name: "fruits", color: "#DFFF2D" } },
+    {
+      id: 3,
+      name: "Заказчик",
+      category: { name: "animals", color: "#198111" }
+    }
+  ];
 
   handleChange = e => {
+    const userInput = e.currentTarget.value;
+
+    const filteredSuggestions = this.suggestions.filter(
+      suggestion =>
+        suggestion.name.toLowerCase().indexOf(userInput.toLowerCase()) > -1
+    );
     this.setState({
-      input: e.target.value
+      activeSuggestion: 0,
+      filteredSuggestions,
+      showSuggestions: true,
+      input: e.currentTarget.value
+    });
+  };
+
+  onClick = e => {
+    this.setState({
+      activeSuggestion: 0,
+      filteredSuggestions: [],
+      showSuggestions: false,
+      userInput: e.currentTarget.innerText.split("Category")[0]
     });
   };
 
@@ -47,9 +87,41 @@ export default class TagInput extends Component {
     }
   };
 
-  _handleKeyDown = e => {
-    if (e.key === "Enter") {
-      this.handleClick();
+  onClick = e => {
+    this.setState({
+      activeSuggestion: 0,
+      filteredSuggestions: [],
+      showSuggestions: false,
+      input: e.currentTarget.innerText.split("Category")[0]
+    });
+  };
+
+  onKeyDown = e => {
+    const { activeSuggestion, filteredSuggestions } = this.state;
+
+    // enter
+    if (e.keyCode === 13) {
+      this.setState({
+        activeSuggestion: 0,
+        showSuggestions: false,
+        input: filteredSuggestions[activeSuggestion]
+      });
+    }
+    // up
+    else if (e.keyCode === 38) {
+      if (activeSuggestion === 0) {
+        return;
+      }
+
+      this.setState({ activeSuggestion: activeSuggestion - 1 });
+    }
+    // down
+    else if (e.keyCode === 40) {
+      if (activeSuggestion - 1 === filteredSuggestions.length) {
+        return;
+      }
+
+      this.setState({ activeSuggestion: activeSuggestion + 1 });
     }
   };
 
@@ -89,19 +161,37 @@ export default class TagInput extends Component {
     });
   };
 
+  closeConfigureTag = () => {
+    this.setState({
+      selectedTag: null
+    });
+  };
+
   render() {
     console.log("%cthis.state", "color: orange; font-size: 20px", this.state);
-    let { input, isEmpty, tags, selectedTag } = this.state;
+
+    let {
+      input,
+      isEmpty,
+      tags,
+      selectedTag,
+      activeSuggestion,
+      filteredSuggestions,
+      showSuggestions
+    } = this.state;
     return (
-      <div>
+      <div className="input-wrapper">
         <h1>This is React-Tag-Component, by the way "AREERS"!</h1>
         <div className="input-with-tags">
-          <input
-            type="text"
-            placeholder="Waiting for your tag..."
-            value={input}
+          <Autocomplete
             onChange={this.handleChange}
-            onKeyDown={this._handleKeyDown}
+            suggestions={this.suggestions}
+            userInput={this.state.input}
+            onKeyDown={this.onKeyDown}
+            onClick={this.onClick}
+            activeSuggestion={activeSuggestion}
+            filteredSuggestions={filteredSuggestions}
+            showSuggestions={showSuggestions}
           />
           <div className="tags-wrapper">
             {tags.length > 0
@@ -119,13 +209,16 @@ export default class TagInput extends Component {
               : null}
           </div>
         </div>
-
         <button onClick={this.handleClick}>Add tag</button>
         {isEmpty && <p>Nothing to add, bruh -_-</p>}
         {selectedTag != null && (
           <ConfigureTag
             categories={this.state.categories}
             configureTag={this.configureTag}
+            closeConfigureTag={this.closeConfigureTag}
+            tag={tags.find(tag => {
+              return tag.id == this.state.selectedTag;
+            })}
           />
         )}
       </div>
