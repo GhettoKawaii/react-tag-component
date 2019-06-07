@@ -30,19 +30,32 @@ export default class TagInput extends Component {
     this.handleChange = this.handleChange.bind(this);
     this.onKeyDown = this.onKeyDown.bind(this);
     this.onClick = this.onClick.bind(this);
+    this.onDisable = this.onDisable.bind(this);
   }
   suggestions = [
-    { id: 0, name: "Sanya", category: { name: "names", color: "#FC1B1B" } },
+    {
+      id: 0,
+      name: "Sanya",
+      category: { name: "names", color: "#FC1B1B" },
+      disabled: false
+    },
     {
       id: 1,
       name: "Passat",
-      category: { name: "transport", color: "#676767" }
+      category: { name: "transport", color: "#676767" },
+      disabled: false
     },
-    { id: 2, name: "XUI", category: { name: "fruits", color: "#DFFF2D" } },
+    {
+      id: 2,
+      name: "XUI",
+      category: { name: "fruits", color: "#DFFF2D" },
+      disabled: false
+    },
     {
       id: 3,
       name: "Заказчик",
-      category: { name: "animals", color: "#198111" }
+      category: { name: "animals", color: "#198111" },
+      disabled: false
     }
   ];
 
@@ -61,6 +74,15 @@ export default class TagInput extends Component {
     });
   };
 
+  onDisable = (e, tag) => {
+    let newTags = this.state.tags;
+    newTags[newTags.indexOf(newTags.find(item => item === tag))].disabled =
+      e.currentTarget.checked;
+    this.setState({
+      tags: newTags
+    });
+  };
+
   onClick = e => {
     this.setState({
       activeSuggestion: 0,
@@ -76,7 +98,11 @@ export default class TagInput extends Component {
         isEmpty: false,
         tags: [
           ...this.state.tags,
-          { id: this.state.tags.length, name: this.state.input }
+          {
+            id: this.state.tags.length,
+            name: this.state.input,
+            disabled: false
+          }
         ],
         input: ""
       });
@@ -88,7 +114,6 @@ export default class TagInput extends Component {
   };
 
   onClick = e => {
-    console.log("event onClick", e.currentTarget);
     const tagName = e.currentTarget.innerText.split("Category: ")[0];
     const tagCategoryName = e.currentTarget.innerText.split("Category: ")[1];
     const currentCategory = this.state.categories.find(cat => {
@@ -96,7 +121,12 @@ export default class TagInput extends Component {
     });
     let newTags = [
       ...this.state.tags,
-      { id: this.state.tags.length, name: tagName, category: currentCategory }
+      {
+        id: this.state.tags.length,
+        name: tagName,
+        category: currentCategory,
+        disabled: false
+      }
     ];
     this.setState({
       activeSuggestion: 0,
@@ -112,11 +142,6 @@ export default class TagInput extends Component {
 
     // enter
     if (e.keyCode === 13) {
-      // this.setState({
-      //   activeSuggestion: 0,
-      //   showSuggestions: false,
-      //   input: filteredSuggestions[activeSuggestion].name
-      // });
       this.handleClick();
     }
     // up
@@ -138,10 +163,9 @@ export default class TagInput extends Component {
   };
 
   deleteTag = e => {
-    console.log("currentTarget", e.currentTarget);
     e.stopPropagation();
     let findItem = this.state.tags.find(tag => {
-      return e.currentTarget.id === tag.id;
+      return Number(e.currentTarget.id) === tag.id;
     });
     let tagArr = this.state.tags;
     tagArr.splice(this.state.tags.indexOf(findItem), 1);
@@ -192,6 +216,8 @@ export default class TagInput extends Component {
       deleteTag,
       selectTag,
       closeConfigureTag,
+      configureTag,
+      onDisable,
       state: {
         input,
         isEmpty,
@@ -199,7 +225,8 @@ export default class TagInput extends Component {
         selectedTag,
         activeSuggestion,
         filteredSuggestions,
-        showSuggestions
+        showSuggestions,
+        categories
       }
     } = this;
     return (
@@ -224,7 +251,6 @@ export default class TagInput extends Component {
                       key={key}
                       deleteTag={deleteTag}
                       selectTag={selectTag}
-                      tagID={key}
                       tag={tag}
                     />
                   );
@@ -236,11 +262,12 @@ export default class TagInput extends Component {
         {isEmpty && <p>Nothing to add, bruh -_-</p>}
         {selectedTag != null && (
           <ConfigureTag
-            categories={this.state.categories}
-            configureTag={this.configureTag}
+            categories={categories}
+            configureTag={configureTag}
             closeConfigureTag={closeConfigureTag}
+            onDisable={onDisable}
             tag={tags.find(tag => {
-              return tag.id === this.state.selectedTag;
+              return tag.id === selectedTag;
             })}
           />
         )}

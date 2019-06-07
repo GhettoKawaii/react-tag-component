@@ -1,7 +1,13 @@
 import React from "react";
 import "./ConfigureTag.css";
 
-const ConfigureTag = ({ categories, configureTag, closeConfigureTag, tag }) => {
+const ConfigureTag = ({
+  categories,
+  configureTag,
+  closeConfigureTag,
+  tag,
+  onDisable
+}) => {
   return (
     <div className="configure-tag-container">
       <button onClick={closeConfigureTag} className="close-configure-tag">
@@ -21,6 +27,17 @@ const ConfigureTag = ({ categories, configureTag, closeConfigureTag, tag }) => {
             );
           })}
         </select>
+      </div>
+      <div className="configure-disable">
+        <label className="switch-disable">
+          <p>Disabled</p>
+          <input
+            onChange={e => onDisable(e, tag)}
+            type="checkbox"
+            checked={tag.disabled}
+          />
+          <span className="slider round" />
+        </label>
       </div>
     </div>
   );
