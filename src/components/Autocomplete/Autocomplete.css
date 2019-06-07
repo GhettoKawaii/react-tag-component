@@ -1,4 +1,4 @@
-input {
+.autocomplete-input {
   border: 1px solid #999;
   padding: 0.5rem;
   width: 300px;
@@ -26,8 +26,8 @@ input {
 
 .suggestion-active,
 .suggestions li:hover {
-  background-color: #008f68;
-  color: #fae042;
+  background-color: whitesmoke;
+  color: orangered;
   cursor: pointer;
   font-weight: 700;
 }

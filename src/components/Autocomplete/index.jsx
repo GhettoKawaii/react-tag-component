@@ -17,7 +17,6 @@ const Autocomplete = ({
       suggestionsListComponent = (
         <ul className="suggestions">
           {filteredSuggestions.map((suggestion, index) => {
-            console.log("suggestion", suggestion);
             let className;
             if (index === activeSuggestion) {
               className = "suggestion-active";
@@ -52,6 +51,7 @@ const Autocomplete = ({
   return (
     <Fragment>
       <input
+        className="autocomplete-input"
         type="text"
         onChange={onChange}
         onKeyDown={onKeyDown}

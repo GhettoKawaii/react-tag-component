@@ -25,3 +25,24 @@
   margin: 0px;
   font-size: 12px;
 }
+.tag-tooltip-description {
+  visibility: hidden;
+}
+
+.tag .tag-tooltip-description {
+  visibility: hidden;
+  width: 120px;
+  font-size: 10px;
+  background-color: black;
+  color: #fff;
+  text-align: center;
+  padding: 5px 0;
+  border-radius: 6px;
+  bottom: -25px;
+  position: absolute;
+  z-index: 1;
+}
+
+.tag:hover .tag-tooltip-description {
+  visibility: visible;
+}

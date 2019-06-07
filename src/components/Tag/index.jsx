@@ -2,7 +2,6 @@ import React from "react";
 import "./Tag.css";
 
 const Tag = ({ tag, selectTag, deleteTag }) => {
-  console.log("tag", tag);
   return (
     <div
       className="tag"
@@ -17,7 +16,9 @@ const Tag = ({ tag, selectTag, deleteTag }) => {
       }
       onClick={() => selectTag(tag.id)}
     >
-      <span className="tag-tooltip-description">{tag.description}</span>
+      {tag.description && (
+        <span className="tag-tooltip-description">{tag.description}</span>
+      )}
       <button
         onClick={e => deleteTag(e, tag)}
         id={tag.id}

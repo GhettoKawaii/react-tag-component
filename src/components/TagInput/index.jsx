@@ -64,6 +64,7 @@ export default class TagInput extends Component {
     this.onKeyDown = this.onKeyDown.bind(this);
     this.onClick = this.onClick.bind(this);
     this.onDisable = this.onDisable.bind(this);
+    this.handleChangeDescription = this.handleChangeDescription.bind(this);
   }
 
   handleChange = e => {
@@ -123,10 +124,6 @@ export default class TagInput extends Component {
   };
 
   onClick = e => {
-    const tagCategoryName = e.currentTarget.innerText.split("Category: ")[1];
-    const currentCategory = this.state.categories.find(cat => {
-      return cat.name === tagCategoryName;
-    });
     let newTags = this.state.tags;
     newTags[
       newTags.indexOf(
@@ -143,6 +140,28 @@ export default class TagInput extends Component {
       tags: newTags
     });
   };
+  handleChangeDescription = (e, tag) => {
+    let tags = this.state.tags;
+    tags[
+      tags.indexOf(
+        tags.find(item => {
+          return item.id === tag.id;
+        })
+      )
+    ].description = e.currentTarget.value;
+    this.setState({ tags });
+  };
+  // changeDescription = updatedTag => {
+  //   let tags = this.state.tags;
+  //   tags[
+  //     tags.indexOf(
+  //       tags.find(item => {
+  //         return item.id === updatedTag.id;
+  //       })
+  //     )
+  //   ].description = updatedTag.description;
+  //   this.setState({ tags });
+  // };
 
   onKeyDown = e => {
     const { activeSuggestion, filteredSuggestions } = this.state;
@@ -226,6 +245,7 @@ export default class TagInput extends Component {
       closeConfigureTag,
       configureTag,
       onDisable,
+      handleChangeDescription,
       state: {
         input,
         isEmpty,
@@ -277,6 +297,7 @@ export default class TagInput extends Component {
             configureTag={configureTag}
             closeConfigureTag={closeConfigureTag}
             onDisable={onDisable}
+            handleChangeDescription={handleChangeDescription}
             tag={tags.find(tag => {
               return tag.id === selectedTag;
             })}
