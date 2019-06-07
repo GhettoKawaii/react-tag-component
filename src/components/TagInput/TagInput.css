@@ -6,6 +6,15 @@
 }
 .input-wrapper {
   display: flex;
+  position: relative;
   align-items: center;
   flex-direction: column;
+}
+.categories-info-box {
+  height: 300px;
+  padding: 20px;
+  position: absolute;
+  top: 0px;
+  right: -400px;
+  border: 1px black dashed;
 }

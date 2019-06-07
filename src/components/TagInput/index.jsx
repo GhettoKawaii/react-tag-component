@@ -13,8 +13,10 @@ export default class TagInput extends Component {
       activeSuggestion: 0,
       filteredSuggestions: [],
       showSuggestions: false,
+      showCatConfig: false,
       tags: [],
       isEmpty: false,
+      configureCategory: null,
       selectedTag: null,
       categories: [
         { name: "transport", color: "#676767" },
@@ -152,17 +154,6 @@ export default class TagInput extends Component {
     ].description = e.currentTarget.value;
     this.setState({ tags });
   };
-  // changeDescription = updatedTag => {
-  //   let tags = this.state.tags;
-  //   tags[
-  //     tags.indexOf(
-  //       tags.find(item => {
-  //         return item.id === updatedTag.id;
-  //       })
-  //     )
-  //   ].description = updatedTag.description;
-  //   this.setState({ tags });
-  // };
 
   onKeyDown = e => {
     const { activeSuggestion, filteredSuggestions } = this.state;
@@ -234,6 +225,24 @@ export default class TagInput extends Component {
       selectedTag: null
     });
   };
+  handleCategorySelect = e => {
+    this.setState({
+      configureCategory: e.target.value
+    });
+  };
+  handleColor = e => {
+    let newCategories = this.state.categories;
+    newCategories[
+      newCategories.indexOf(
+        newCategories.find(cat => {
+          return cat.name === this.state.configureCategory;
+        })
+      )
+    ].color = e.target.value;
+    this.setState({
+      categories: newCategories
+    });
+  };
 
   render() {
     console.log("%cthis.state", "color: orange; font-size: 20px", this.state);
@@ -247,6 +256,8 @@ export default class TagInput extends Component {
       configureTag,
       onDisable,
       handleChangeDescription,
+      handleCategorySelect,
+      handleColor,
       state: {
         input,
         isEmpty,
@@ -255,7 +266,8 @@ export default class TagInput extends Component {
         activeSuggestion,
         filteredSuggestions,
         showSuggestions,
-        categories
+        categories,
+        configureCategory
       }
     } = this;
     const showTags = this.state.tags.filter(tag => {
@@ -263,6 +275,49 @@ export default class TagInput extends Component {
     });
     return (
       <div className="input-wrapper">
+        <div
+          className="categories-info-box"
+          style={
+            this.state.showCatConfig
+              ? { visibility: "visible" }
+              : { visibility: "hidden" }
+          }
+        >
+          <div>
+            <h2>Configurate categories here</h2>
+            <label>Select category:</label>
+            <select onChange={handleCategorySelect}>
+              <option>...</option>
+              {this.state.categories.map((category, key) => {
+                return <option key={key}>{category.name}</option>;
+              })}
+            </select>
+          </div>
+          {configureCategory && (
+            <div>
+              <label>Select color</label>
+              <select onChange={handleColor}>
+                <option>...</option>
+                <option>black</option>
+                <option>silver</option>
+                <option>gray</option>
+                <option>white</option>
+                <option>maroon</option>
+                <option>red</option>
+                <option>purple</option>
+                <option>fuchsia</option>
+                <option>green</option>
+                <option>lime</option>
+                <option>olive</option>
+                <option>yellow</option>
+                <option>navy</option>
+                <option>blue</option>
+                <option>teal</option>
+                <option>aqua</option>
+              </select>
+            </div>
+          )}
+        </div>
         <h1>This is React-Tag-Component, by the way "AREERS"!</h1>
         <div className="input-with-tags">
           <Autocomplete
@@ -291,6 +346,13 @@ export default class TagInput extends Component {
           </div>
         </div>
         <button onClick={this.handleClick}>Add tag</button>
+        <button
+          onClick={() => {
+            this.setState({ showCatConfig: !this.state.showCatConfig });
+          }}
+        >
+          Show categories configuration
+        </button>
         {isEmpty && <p>Nothing to add, bruh -_-</p>}
         {selectedTag != null && (
           <ConfigureTag
