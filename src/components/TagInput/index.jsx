@@ -13,7 +13,40 @@ export default class TagInput extends Component {
       activeSuggestion: 0,
       filteredSuggestions: [],
       showSuggestions: false,
-      tags: [],
+      tags: [
+        {
+          id: 20,
+          name: "Sanya",
+          category: { name: "names", color: "#FC1B1B" },
+          disabled: false,
+          description: "The best name ever",
+          show: false
+        },
+        {
+          id: 21,
+          name: "Passat",
+          category: { name: "transport", color: "#676767" },
+          disabled: false,
+          description: "German auto",
+          show: false
+        },
+        {
+          id: 22,
+          name: "Banana",
+          category: { name: "fruits", color: "#DFFF2D" },
+          disabled: false,
+          description: "Yellow sausage",
+          show: false
+        },
+        {
+          id: 23,
+          name: "Iguana",
+          category: { name: "animals", color: "#198111" },
+          disabled: false,
+          description: "Anonymous agent",
+          show: false
+        }
+      ],
       isEmpty: false,
       selectedTag: null,
       categories: [
@@ -32,37 +65,11 @@ export default class TagInput extends Component {
     this.onClick = this.onClick.bind(this);
     this.onDisable = this.onDisable.bind(this);
   }
-  suggestions = [
-    {
-      id: 0,
-      name: "Sanya",
-      category: { name: "names", color: "#FC1B1B" },
-      disabled: false
-    },
-    {
-      id: 1,
-      name: "Passat",
-      category: { name: "transport", color: "#676767" },
-      disabled: false
-    },
-    {
-      id: 2,
-      name: "XUI",
-      category: { name: "fruits", color: "#DFFF2D" },
-      disabled: false
-    },
-    {
-      id: 3,
-      name: "Заказчик",
-      category: { name: "animals", color: "#198111" },
-      disabled: false
-    }
-  ];
 
   handleChange = e => {
     const userInput = e.currentTarget.value;
 
-    const filteredSuggestions = this.suggestions.filter(
+    const filteredSuggestions = this.state.tags.filter(
       suggestion =>
         suggestion.name.toLowerCase().indexOf(userInput.toLowerCase()) > -1
     );
@@ -101,7 +108,9 @@ export default class TagInput extends Component {
           {
             id: this.state.tags.length,
             name: this.state.input,
-            disabled: false
+            disabled: false,
+            description: "",
+            show: true
           }
         ],
         input: ""
@@ -114,20 +123,18 @@ export default class TagInput extends Component {
   };
 
   onClick = e => {
-    const tagName = e.currentTarget.innerText.split("Category: ")[0];
     const tagCategoryName = e.currentTarget.innerText.split("Category: ")[1];
     const currentCategory = this.state.categories.find(cat => {
       return cat.name === tagCategoryName;
     });
-    let newTags = [
-      ...this.state.tags,
-      {
-        id: this.state.tags.length,
-        name: tagName,
-        category: currentCategory,
-        disabled: false
-      }
-    ];
+    let newTags = this.state.tags;
+    newTags[
+      newTags.indexOf(
+        this.state.tags.find(tag => {
+          return tag.name === e.target.getAttribute("value");
+        })
+      )
+    ].show = true;
     this.setState({
       activeSuggestion: 0,
       filteredSuggestions: [],
@@ -162,17 +169,19 @@ export default class TagInput extends Component {
     }
   };
 
-  deleteTag = e => {
+  deleteTag = (e, tag) => {
     e.stopPropagation();
-    let findItem = this.state.tags.find(tag => {
-      return Number(e.currentTarget.id) === tag.id;
-    });
-    let tagArr = this.state.tags;
-    tagArr.splice(this.state.tags.indexOf(findItem), 1);
-    this.setState({
-      tags: tagArr,
-      selectedTag: null
-    });
+    if (!tag.disabled) {
+      let findItem = this.state.tags.find(tag => {
+        return Number(e.currentTarget.id) === tag.id;
+      });
+      let tagArr = this.state.tags;
+      tagArr.splice(this.state.tags.indexOf(findItem), 1);
+      this.setState({
+        tags: tagArr,
+        selectedTag: null
+      });
+    }
   };
 
   selectTag = id => {
@@ -210,7 +219,6 @@ export default class TagInput extends Component {
     console.log("%cthis.state", "color: orange; font-size: 20px", this.state);
     let {
       handleChange,
-      suggestions,
       onKeyDown,
       onClick,
       deleteTag,
@@ -229,13 +237,16 @@ export default class TagInput extends Component {
         categories
       }
     } = this;
+    const showTags = this.state.tags.filter(tag => {
+      return tag.show;
+    });
     return (
       <div className="input-wrapper">
         <h1>This is React-Tag-Component, by the way "AREERS"!</h1>
         <div className="input-with-tags">
           <Autocomplete
             onChange={handleChange}
-            suggestions={suggestions}
+            suggestions={tags}
             userInput={input}
             onKeyDown={onKeyDown}
             onClick={onClick}
@@ -244,8 +255,8 @@ export default class TagInput extends Component {
             showSuggestions={showSuggestions}
           />
           <div className="tags-wrapper">
-            {tags.length > 0
-              ? tags.map((tag, key) => {
+            {showTags.length > 0
+              ? showTags.map((tag, key) => {
                   return (
                     <Tag
                       key={key}

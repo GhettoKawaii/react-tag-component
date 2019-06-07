@@ -17,16 +17,24 @@ const Autocomplete = ({
       suggestionsListComponent = (
         <ul className="suggestions">
           {filteredSuggestions.map((suggestion, index) => {
+            console.log("suggestion", suggestion);
             let className;
             if (index === activeSuggestion) {
               className = "suggestion-active";
             }
 
             return (
-              <li className={className} key={suggestion.id} onClick={onClick}>
+              <li
+                className={className}
+                key={suggestion.id}
+                value={suggestion.name}
+                onClick={onClick}
+              >
                 {suggestion.name}
                 <br />
-                Category: {suggestion.category.name}
+                {suggestion.category && (
+                  <>Category: {suggestion.category.name} </>
+                )}
               </li>
             );
           })}
