@@ -18,3 +18,9 @@
   right: -400px;
   border: 1px black dashed;
 }
+.category-configure-rows {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  height: 50%;
+}

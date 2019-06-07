@@ -243,6 +243,24 @@ export default class TagInput extends Component {
       categories: newCategories
     });
   };
+  createNewCategory = e => {
+    if (e.keyCode === 13) {
+      if (
+        this.state.categories.indexOf(
+          this.state.categories.find(cat => {
+            return cat.name === e.currentTarget.value;
+          })
+        )
+      ) {
+        this.setState({
+          categories: [
+            ...this.state.categories,
+            { name: e.currentTarget.value, color: "coral" }
+          ]
+        });
+      } else alert("Category already exist");
+    }
+  };
 
   render() {
     console.log("%cthis.state", "color: orange; font-size: 20px", this.state);
@@ -258,6 +276,7 @@ export default class TagInput extends Component {
       handleChangeDescription,
       handleCategorySelect,
       handleColor,
+      createNewCategory,
       state: {
         input,
         isEmpty,
@@ -283,40 +302,46 @@ export default class TagInput extends Component {
               : { visibility: "hidden" }
           }
         >
-          <div>
-            <h2>Configurate categories here</h2>
-            <label>Select category:</label>
-            <select onChange={handleCategorySelect}>
-              <option>...</option>
-              {this.state.categories.map((category, key) => {
-                return <option key={key}>{category.name}</option>;
-              })}
-            </select>
-          </div>
-          {configureCategory && (
+          <h2>Configurate categories here</h2>
+          <div className="category-configure-rows">
             <div>
-              <label>Select color</label>
-              <select onChange={handleColor}>
+              <label>Create category:</label>
+              <input onKeyDown={createNewCategory} />
+            </div>
+            <div>
+              <label>Select category:</label>
+              <select onChange={handleCategorySelect}>
                 <option>...</option>
-                <option>black</option>
-                <option>silver</option>
-                <option>gray</option>
-                <option>white</option>
-                <option>maroon</option>
-                <option>red</option>
-                <option>purple</option>
-                <option>fuchsia</option>
-                <option>green</option>
-                <option>lime</option>
-                <option>olive</option>
-                <option>yellow</option>
-                <option>navy</option>
-                <option>blue</option>
-                <option>teal</option>
-                <option>aqua</option>
+                {this.state.categories.map((category, key) => {
+                  return <option key={key}>{category.name}</option>;
+                })}
               </select>
             </div>
-          )}
+            {configureCategory && (
+              <div>
+                <label>Select color</label>
+                <select onChange={handleColor}>
+                  <option>...</option>
+                  <option>black</option>
+                  <option>silver</option>
+                  <option>gray</option>
+                  <option>white</option>
+                  <option>maroon</option>
+                  <option>red</option>
+                  <option>purple</option>
+                  <option>fuchsia</option>
+                  <option>green</option>
+                  <option>lime</option>
+                  <option>olive</option>
+                  <option>yellow</option>
+                  <option>navy</option>
+                  <option>blue</option>
+                  <option>teal</option>
+                  <option>aqua</option>
+                </select>
+              </div>
+            )}
+          </div>
         </div>
         <h1>This is React-Tag-Component, by the way "AREERS"!</h1>
         <div className="input-with-tags">
