@@ -13,40 +13,7 @@ export default class TagInput extends Component {
       activeSuggestion: 0,
       filteredSuggestions: [],
       showSuggestions: false,
-      tags: [
-        {
-          id: 20,
-          name: "Sanya",
-          category: { name: "names", color: "#FC1B1B" },
-          disabled: false,
-          description: "The best name ever",
-          show: false
-        },
-        {
-          id: 21,
-          name: "Passat",
-          category: { name: "transport", color: "#676767" },
-          disabled: false,
-          description: "German auto",
-          show: false
-        },
-        {
-          id: 22,
-          name: "Banana",
-          category: { name: "fruits", color: "#DFFF2D" },
-          disabled: false,
-          description: "Yellow sausage",
-          show: false
-        },
-        {
-          id: 23,
-          name: "Iguana",
-          category: { name: "animals", color: "#198111" },
-          disabled: false,
-          description: "Anonymous agent",
-          show: false
-        }
-      ],
+      tags: [],
       isEmpty: false,
       selectedTag: null,
       categories: [
@@ -56,6 +23,40 @@ export default class TagInput extends Component {
         { name: "names", color: "#FC1B1B" }
       ]
     };
+    this.state.tags = [
+      {
+        id: 20,
+        name: "Sanya",
+        category: this.state.categories[3],
+        disabled: false,
+        description: "The best name ever",
+        show: false
+      },
+      {
+        id: 21,
+        name: "Passat",
+        category: this.state.categories[0],
+        disabled: false,
+        description: "German auto",
+        show: false
+      },
+      {
+        id: 22,
+        name: "Banana",
+        category: this.state.categories[1],
+        disabled: false,
+        description: "Yellow sausage",
+        show: false
+      },
+      {
+        id: 23,
+        name: "Iguana",
+        category: this.state.categories[2],
+        disabled: false,
+        description: "Anonymous agent",
+        show: false
+      }
+    ];
     this.selectTag = this.selectTag.bind(this);
     this.deleteTag = this.deleteTag.bind(this);
     this.configureTag = this.configureTag.bind(this);
